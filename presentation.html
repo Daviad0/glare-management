@@ -1,0 +1,108 @@
+<html>
+    <head>
+        <title>Lightning Robotics Quick Presentation</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round"
+      rel="stylesheet">
+      <link href="https://fonts.googleapis.com/icon?family=Open+Sans"
+      rel="stylesheet">
+    </head>
+    <style>
+        .textbox{
+            background-color: #d6dfff;
+            border: 2px solid #3454c7;
+            border-radius: 8px;
+            padding: 10px;
+            color: #00186b;
+            font-weight: 500;
+            font-size: 30px;
+            font-family: "Open Sans", sans-serif;
+            transition: all .25s ease-in-out;
+        }
+        .textbox:hover{
+            border: 2px solid #00186b;
+        }
+        body{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .text{
+            font-family: "Open Sans", sans-serif;
+            color: #001e85;
+        }
+        .button{
+            background-color: #3454c7;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-family: "Open Sans", sans-serif;
+            transition: all .25s ease-in-out;
+        }
+        .button:hover{
+            background-color: #00186b;
+        }
+    </style>
+    <body style="width:100%;text-align:center">
+        <div style="display: inline-block;text-align:center;width:80%" id="starter">
+            
+            <input id="titleI" type="text" class="textbox" placeholder="Title Here" style="width:100%;display:inline-block;text-align:center"/>
+            <input id="subI" type="text" class="textbox" placeholder="Icon Here" style="width:80%;display:inline-block;text-align:center;font-size:20px"/>
+            <br/>
+            <br/>
+            <input type="button" class="button" value="Present" id="present"/>
+        </div>
+        <div id="content" style="display: inline-block;text-align:center;width:80%;display:none">
+            <span id="titleS" class="text" style="font-size:160px;word-wrap: normal;">Cans Only</span>
+            <br/>
+
+            <span id="subS" class="material-icons-round" style="font-size:140px;word-wrap: normal;color:#3454c7">verified</span>
+            <div id="subS_QR" style="display: inline-block;text-align:center;width:100%"></div>
+        </div>
+    </body>
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script>
+        var done = false;
+
+        window.addEventListener('keydown', function(e) {
+            if(e.keyCode == 13 && !done){
+                done = true;
+                document.getElementById("present").click();
+            }
+            if(e.keyCode == 8 && done){
+                done = false;
+                document.getElementById("starter").style.display = "inline-block";
+                document.getElementById("content").style.display = "none";
+            }
+        });
+        document.getElementById("present").addEventListener('click', function(){
+            document.getElementById("starter").style.display = "none";
+            document.getElementById("content").style.display = "inline-block";
+            document.getElementById("titleS").innerHTML = document.getElementById("titleI").value;
+            if(document.getElementById("subI").value.includes("http")){
+                document.getElementById("subS").style.display = "none";
+                document.getElementById("subS_QR").style.display = "unset";
+                const qrcode = new QRCode(document.getElementById('subS_QR'), {
+                    text: document.getElementById("subI").value,
+                    width: 256,
+                    height: 256,
+                    colorDark : '#00186b',
+                    colorLight : '#fff',
+                    correctLevel : QRCode.CorrectLevel.H
+                  });
+                  setTimeout(function(){
+                    document.getElementById("subS_QR").getElementsByTagName('img')[0].style.display = "inline-block";
+                  }, 200);
+                
+            }else{
+                document.getElementById("subS").innerHTML = document.getElementById("subI").value;
+                document.getElementById("subS").style.display = "unset";
+                document.getElementById("subS_QR").style.display = "none";
+            }
+            
+        
+        });
+    </script>
+</html>
