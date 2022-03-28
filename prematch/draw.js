@@ -76,19 +76,28 @@ window.addEventListener("resize", function(){
 
 document.getElementById("tool1").addEventListener("click", function(){
   tool = "start";
+  document.getElementById("tool1").style.border = "2px solid yellow";
+  document.getElementById("tool2").style.border = "2px solid transparent";
+  document.getElementById("tool3").style.border = "2px solid transparent";
 });
 
 document.getElementById("tool2").addEventListener("click", function(){
   tool = "end";
+  document.getElementById("tool2").style.border = "2px solid yellow";
+  document.getElementById("tool1").style.border = "2px solid transparent";
+  document.getElementById("tool3").style.border = "2px solid transparent";
 });
 
 document.getElementById("tool3").addEventListener("click", function(){
   tool = "draw";
+  document.getElementById("tool3").style.border = "2px solid yellow";
+  document.getElementById("tool2").style.border = "2px solid transparent";
+  document.getElementById("tool1").style.border = "2px solid transparent";
 });
 
-document.addEventListener('mousemove', onMouseMove, false)
+document.addEventListener('mousemove', onMouseMove)
 
-document.addEventListener('touchmove', function(e){
+parentMap.addEventListener('touchmove', function(e){
   //e.preventDefault();
   //e.stopPropagation();
   var touch = e.touches[0];
@@ -99,7 +108,7 @@ document.addEventListener('touchmove', function(e){
   document.dispatchEvent(evnt);
 });
 
-document.addEventListener('touchstart', function(e){
+parentMap.addEventListener('touchstart', function(e){
   //e.preventDefault();
   //e.stopPropagation();
   var touch = e.touches[0];
@@ -107,14 +116,14 @@ document.addEventListener('touchstart', function(e){
     clientX: touch.clientX,
     clientY: touch.clientY
   });
-  document.dispatchEvent(evnt);
+  parentMap.dispatchEvent(evnt);
 });
 
-document.addEventListener('touchend', function(e){
+parentMap.addEventListener('touchend', function(e){
   //e.preventDefault();
   //e.stopPropagation();
   var evnt = new MouseEvent("mouseup", {});
-  document.dispatchEvent(evnt);
+  parentMap.dispatchEvent(evnt);
 });
 
 function onMouseMove(e){
@@ -124,6 +133,9 @@ function onMouseMove(e){
   y = e.clientY;
   if(tool == "draw" && tracking){
     if(color != "erase"){
+      if(currentPoints.length == 0){
+        c.moveTo(x-rect.left,y-rect.top)
+      }
       currentPoints.push([x-rect.left,y-rect.top])
     }else{
       erasedPoints.push([x-rect.left,y-rect.top])
